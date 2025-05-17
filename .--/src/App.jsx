@@ -22,6 +22,11 @@ const App = () => {
     { value: 'vs-dark', label: 'Dark' },
     { value: 'light', label: 'Light' },
   ];
+  const templates = [
+    { value: 'hello', label: 'Hello World', code: 'print("Hello, World!")' },
+    { value: 'loop', label: 'For Loop', code: 'for i in range(5):\n    print(i)' },
+    { value: 'input', label: 'User Input', code: 'name = input("Enter your name: ")\nprint("Hello, " + name)' },
+  ];
 
   const tips = [
     "Use print() to display output.",
@@ -32,7 +37,7 @@ const App = () => {
   const handleRun = async () => {
     setLoading(true);
     try {
-      const response = await Axios.post('http://localhost:8000/execute', {
+      const response = await Axios.post('https://coding-editor-backend.onrender.com/execute', {
         code,
         language: language.value,
         input,
@@ -42,6 +47,10 @@ const App = () => {
       setOutput('Error: ' + err.message);
     }
     setLoading(false);
+  };
+
+  const handleTemplateChange = (selected) => {
+    setCode(selected.code);
   };
 
   useEffect(() => {
@@ -65,6 +74,12 @@ const App = () => {
             options={themes}
             value={themes.find((t) => t.value === theme)}
             onChange={(e) => setTheme(e.value)}
+            className="select"
+          />
+          <Select
+            options={templates}
+            onChange={handleTemplateChange}
+            placeholder="Select Template"
             className="select"
           />
           <button
